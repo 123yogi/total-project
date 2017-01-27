@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:webflow-config="http://www.springframework.org/schema/webflow-config"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/security
+	http://www.springframework.org/schema/security/spring-security.xsd
+	http://www.springframework.org/schema/webflow-config 
+	http://www.springframework.org/schema/webflow-config/spring-webflow-config.xsd">
+	 
+	  <http auto-config="true"  use-expressions="true">
+	 	    <!--  <intercept-url pattern="/admin1**" access="hasRole('ROLE_ADMIN')"/> -->
+            <!-- <intercept-url pattern="/login/**" access="hasRole('ROLE_USER')"/> -->
+             <!-- <intercept-url pattern="/user/**" access="hasRole('ROLE_USER')" /> -->
+             
+        
+		<intercept-url pattern="/admin**" access="hasRole('ROLE_ADMIN')"/>
+		<intercept-url pattern="/user**" access="hasRole('ROLE_USER')"/>
+		<!-- <intercept-url pattern="/ret/**" access="hasRole('ROLE_USER')"/> -->
+		<form-login login-page="/login" default-target-url="/welcome" authentication-failure-url="/fail2login"/>
+        <logout logout-success-url="/logout"/>     
+    </http> 	 
+	<authentication-manager>
+	<authentication-provider>
+	<jdbc-user-service data-source-ref="dataSource" 
+	 users-by-username-query="select name,password,enabled from user where name=?" 
+authorities-by-username-query="select u1.name,u2.role from user u1, login u2 where u1.id = u2.id and u1.name =?" />
+	</authentication-provider>
+	</authentication-manager>
+	<!--  <webflow-config:flow-executor id="flowExecutor"
+		flow-registry="flowRegistry" />
+
+	<webflow-config:flow-registry id="flowRegistry"
+		base-path="/WEB-INF/flows">
+		<webflow-config:flow-location path="/flow/checkout-flow.xml"
+			id="checkout" />
+	</webflow-config:flow-registry>
+
+	 <bean id="flowHandlerMapping" class="org.springframework.webflow.mvc.servlet.FlowHandlerMapping">
+		<property name="flowRegistry" ref="flowRegistry" />
+	</bean>
+
+	<bean id="flowHandlerAdapter" class="org.springframework.webflow.mvc.servlet.FlowHandlerAdapter">
+		<property name="flowExecutor" ref="flowExecutor" />
+	</bean>-->
+	</beans:beans>
